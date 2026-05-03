@@ -78,7 +78,9 @@ export class ChatSlashCommandsContribution extends Disposable {
 			const workspaceFolder = workspaceContextService.getWorkspace().folders[0];
 
 			if (!requestedPath) {
-				const cwd = workingDirectoryResolver.getSessionWorkingDirectory(sessionResource)
+				const requestedCwd = workingDirectoryResolver.getSessionWorkingDirectory(sessionResource);
+				console.log('[/cwd DEBUG] Get CWD override:', { sessionResource: sessionResource.toString(), cwd: requestedCwd?.toString() });
+				const cwd = requestedCwd
 					?? workingDirectoryResolver.resolve(sessionResource)
 					?? workspaceFolder?.uri;
 
@@ -118,6 +120,7 @@ export class ChatSlashCommandsContribution extends Disposable {
 			}
 
 			workingDirectoryResolver.setSessionWorkingDirectory(sessionResource, resolvedUri);
+			console.log('[/cwd DEBUG] Set CWD override:', { sessionResource: sessionResource.toString(), resolvedUri: resolvedUri.toString() });
 			progress.report({
 				content: new MarkdownString(nls.localize('cwd.updated', "Working directory set to `{0}`", labelService.getUriLabel(resolvedUri))),
 				kind: 'markdownContent'

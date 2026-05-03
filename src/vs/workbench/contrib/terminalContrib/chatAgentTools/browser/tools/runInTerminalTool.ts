@@ -634,6 +634,7 @@ export class RunInTerminalTool extends Disposable implements IToolImpl {
 
 		const chatSessionResource = context.chatSessionResource;
 		let instance: ITerminalInstance | undefined;
+		console.log('[RunInTerminal DEBUG] prepareToolInvocation chatSessionResource:', chatSessionResource?.toString());
 		if (chatSessionResource) {
 			const toolTerminal = this._sessionTerminalAssociations.get(chatSessionResource);
 			if (toolTerminal && !toolTerminal.isBackground) {
@@ -646,6 +647,7 @@ export class RunInTerminalTool extends Disposable implements IToolImpl {
 			(async () => {
 				if (chatSessionResource) {
 					const sessionCwd = this._workingDirectoryResolver.getSessionWorkingDirectory(chatSessionResource);
+					console.log('[RunInTerminal DEBUG] sessionCwd from override:', sessionCwd?.toString());
 					if (sessionCwd) {
 						return sessionCwd;
 					}
@@ -660,6 +662,7 @@ export class RunInTerminalTool extends Disposable implements IToolImpl {
 			})(),
 			this._terminalSandboxService.checkForSandboxingPrereqs()
 		]);
+		console.log('[RunInTerminal DEBUG] resolved CWD:', cwd?.toString(), 'isSandboxWrapped will be:', 'pending');
 		const language = os === OperatingSystem.Windows ? 'pwsh' : 'sh';
 		const isTerminalSandboxEnabled = sandboxPrereqs.enabled;
 		const explicitUnsandboxRequest = isTerminalSandboxEnabled && args.requestUnsandboxedExecution === true;
