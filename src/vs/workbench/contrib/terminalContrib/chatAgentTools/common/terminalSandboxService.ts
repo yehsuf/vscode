@@ -413,7 +413,7 @@ export class TerminalSandboxService extends Disposable implements ITerminalSandb
 	}
 
 	private _getSandboxCommandWithPreservedCwd(command: string, cwd: URI | undefined): string {
-		if (this._os !== OperatingSystem.Linux || !cwd?.path || cwd.path === this._tempDir?.path) {
+		if (!cwd?.path || cwd.path === this._tempDir?.path) {
 			return command;
 		}
 		return `cd ${this._quoteShellArgument(cwd.path)} && ${command}`;
