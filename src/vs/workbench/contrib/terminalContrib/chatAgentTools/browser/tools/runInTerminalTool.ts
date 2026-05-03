@@ -1206,6 +1206,7 @@ export class RunInTerminalTool extends Disposable implements IToolImpl {
 		);
 
 		const didSandboxWrapCommand = toolSpecificData.commandLine.isSandboxWrapped === true;
+		console.log('[RunInTerminal DEBUG invoke] didSandboxWrapCommand:', didSandboxWrapCommand, 'toolSpecificData.cwd:', toolSpecificData.cwd?.toString());
 		const isSandboxEnabled = await this._terminalSandboxService.isEnabled();
 		// Prepend a cd command to ensure the terminal runs in the resolved CWD.
 		// This works both with and without sandbox wrapping: the outer cd sets
@@ -1220,6 +1221,7 @@ export class RunInTerminalTool extends Disposable implements IToolImpl {
 				command = `cd "${cwdPath}" && ${command}`;
 			}
 		}
+		console.log('[RunInTerminal DEBUG invoke] final command:', command.substring(0, 200));
 		const commandLineForMetadata = isSandboxEnabled
 			? toolSpecificData.commandLine.forDisplay ?? toolSpecificData.commandLine.original
 			: undefined;
@@ -1240,6 +1242,7 @@ export class RunInTerminalTool extends Disposable implements IToolImpl {
 
 		// Unified terminal initialization
 		this._logService.debug(`RunInTerminalTool: Creating ${executionOptions.persistentSession ? 'background' : 'foreground'} terminal. termId=${termId}, chatSessionResource=${chatSessionResource}`);
+		console.log('[RunInTerminal DEBUG invoke] executing with cwd:', toolSpecificData.cwd?.toString());
 		const toolTerminal = await this._initTerminal(chatSessionResource, termId, terminalToolSessionId, executionOptions.persistentSession, token);
 
 		this._handleTerminalVisibility(toolTerminal, chatSessionResource);
